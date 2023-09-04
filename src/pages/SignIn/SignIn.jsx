@@ -43,16 +43,13 @@ export const SignIn = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(
-          "https://serverformacion.up.railway.app/api/signIn",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        const response = await fetch("http://localhost:3000/api/signIn", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
         if (response.ok) {
           toast.success("Inicio de sesión exitosa!");
@@ -87,7 +84,7 @@ export const SignIn = () => {
   return (
     <div className="h-screen min-w-full flex flex-col justify-center items-center">
       <Navbar title={"Iniciar Sesión"} />
-      <div className="max-w-6xl m-auto border border-neutral-400 h-[600px] w-full">
+      <div className="max-w-[29rem] my-10 lg:my-auto md:max-w-4xl xl:max-w-6xl m-auto border border-neutral-400 h-[600px] w-full">
         <form
           className="w-full h-full flex flex-col justify-center items-center gap-y-20"
           action=""
@@ -98,7 +95,7 @@ export const SignIn = () => {
               value={formData.email}
               name="email"
               type="email"
-              className="max-w-lg border border-black shadow-md h-[60px] w-[576px] text-lg px-4 py-1"
+              className="max-w-lg border border-black shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
               placeholder="Correo electrónico"
             />
             {errors.email && <p className="text-red-500">{errors.email}</p>}
@@ -109,7 +106,7 @@ export const SignIn = () => {
               value={formData.password}
               name="password"
               type="password"
-              className="max-w-lg border border-black shadow-md h-[60px] w-[576px] text-lg px-4 py-1"
+              className="max-w-lg border border-black shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
               placeholder="Contraseña"
             />
             {errors.password && (

@@ -1,16 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { LogOut } from "lucide-react";
+import { useUserContext } from "../../Context/UserContext";
+import jwtDecode from "jwt-decode";
+import { BodyManager } from "../../components/BodyManager/BodyManager";
+import { BodyAdmin } from "../../components/BodyAdmin/BodyAdmin";
+import { BodyEmployee } from "../../components/BodyEmployee/BodyEmployee";
 
 export const Home = () => {
   const navigate = useNavigate();
+  const [rol, setRol] = useState("");
+  const [nit, setNit] = useState("");
+
   const isAuthenticated = Cookies.get("token");
+  const { clearToken, getTokenFromCookies } = useUserContext();
 
   useEffect(() => {
-    // Si el usuario no está autenticado, redirige al formulario de inicio de sesión
+    if (isAuthenticated) {
+      const token = getTokenFromCookies();
+      const tokensito = jwtDecode(token);
+      console.log(tokensito);
+      const { rol, nit, documentNumber } = jwtDecode(token);
+      console.log(documentNumber);
+      setNit(nit);
+      setRol(rol);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isAuthenticated) {
       navigate("/Login");
     }
@@ -18,23 +37,18 @@ export const Home = () => {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    clearToken();
     navigate("/Login");
     toast.success("Cierre de sesión exitoso");
-    // Aquí podrías redirigir a la página de inicio de sesión si lo deseas
   };
-
   return (
-    <div className="h-screen min-w-full flex flex-col justify-center items-center">
-      <Navbar title={"¡Bienvenido!"} />
-      <div className="max-w-7xl m-auto border border-neutral-400 h-[600px] w-full">
-        <div className="flex justify-center items-center mt-5">
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 px-8 py-4 text-lg text-white rounded-lg flex items-center">
-            Cerrar sesión <LogOut className="ml-2" size={20} />
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen  min-w-full flex flex-col justify-center items-center">
+      <Navbar title={"Formación Complementaria"} />
+      {rol === "employee" && <BodyEmployee />}
+      {rol == "manager" && (
+        <BodyManager handleLogout={handleLogout} nit={nit} />
+      )}
+      {rol === "admin" && <BodyAdmin handleLogout={handleLogout} />}
     </div>
   );
 };
