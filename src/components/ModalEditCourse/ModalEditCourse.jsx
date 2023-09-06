@@ -1,117 +1,77 @@
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { useUserContext } from "../../Context/UserContext";
-import jwtDecode from "jwt-decode";
 
-export const ModalCreateCourse = ({ onClose }) => {
-  // Estados para los campos de entrada
-  const [nameEnterprise, setNameEnterprise] = useState("");
-  const [nit, setNit] = useState("");
-  const [cityEnterprise, setCityEnterprise] = useState("");
-  const [nameManager, setNameManager] = useState("");
-  const [cellphoneManager, setCellphoneManager] = useState("");
-  const [emailManager, setEmailManager] = useState("");
-  const [courseNumber, setCourseNumber] = useState("");
-  const [nameCourse, setNameCourse] = useState("");
-  const [nameCourseAssigned, setNameCourseAssigned] = useState("");
-  const [radicado, setRadicado] = useState("");
-  const [nis, setNis] = useState("");
-  const [instructor, setInstructor] = useState("");
-  const [responseDate, setResponseDate] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [radicadoConfirmation, setRadicadoConfirmation] = useState("");
+export const ModalEditCourse = ({ assignedCourse, onClose }) => {
+  //Se crea data para simplificar la asignación de valores del curso.
+  const data = assignedCourse;
+
+  const [nameEnterprise, setNameEnterprise] = useState(
+    data.enterprise.nameEnterprise
+  );
+  const [nit, setNit] = useState(data.enterprise.nit);
+  const [cityEnterprise, setCityEnterprise] = useState(
+    data.enterprise.cityEnterprise
+  );
+  const [nameManager, setNameManager] = useState(
+    data.enterprise.manager.nameManager
+  );
+  const [cellphoneManager, setCellphoneManager] = useState(
+    data.enterprise.manager.cellphoneManager
+  );
+  const [emailManager, setEmailManager] = useState(
+    data.enterprise.manager.emailManager
+  );
+  const [courseNumber, setCourseNumber] = useState(data.course.courseNumber);
+  const [nameCourse, setNameCourse] = useState(data.course.nameCourse);
+  const [nameCourseAssigned, setNameCourseAssigned] = useState(
+    data.course.nameCourseAssigned
+  );
+  const [radicado, setRadicado] = useState(data.course.radicado);
+  const [nis, setNis] = useState(data.course.nis);
+  const [instructor, setInstructor] = useState(data.course.instructor);
+  const [responseDate, setResponseDate] = useState(data.course.responseDate);
+  const [startDate, setStartDate] = useState(data.course.startDate);
+  const [contactDate, setContactDate] = useState(data.createdAt);
+  //Fecha de contacto formateada para que el input tipo datetime-local la pueda leer
+  const formattedDate = new Date(contactDate).toISOString().slice(0, 16);
+
+  const [radicadoConfirmation, setRadicadoConfirmation] = useState(
+    data.course.radicadoConfirmation
+  );
+  const [state, setState] = useState(data.idState);
   const [documentNumberAdmin, setDocumentNumberAdmin] = useState("");
-  // Estado para almacenar las opciones de empresas
-  const [empresasOptions, setEmpresasOptions] = useState([]);
 
-  const { getTokenFromCookies } = useUserContext();
-  // Obtener las opciones de empresas desde la API
-  useEffect(() => {
-    fetch("http://localhost:3000/api/enterprises") // Ajusta la URL de la API según tu configuración
-      .then((response) => response.json())
-      .then((data) => {
-        const nameEnterpriseArray = data.map((item) => item.nameEnterprise);
-        setEmpresasOptions(nameEnterpriseArray);
-      })
-      .catch((error) => {
-        console.error("Error al obtener las empresas", error);
-      });
-  }, []);
+  // Función para formatear una fecha en formato legible
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
 
-  useEffect(() => {
-    const token = getTokenFromCookies();
-    const { userId } = jwtDecode(token);
-    console.log(userId);
-    setDocumentNumberAdmin(userId);
-  }, []);
+    const date = new Date(dateString);
 
-  // Función para cargar los detalles de la empresa seleccionada
-  const cargarDetallesEmpresa = (nameEnterprise) => {
-    fetch(`http://localhost:3000/api/enterprise/${nameEnterprise}`) // Ajusta la URL de la API según tu configuración
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        // Actualiza los estados con los detalles de la empresa
-        setCityEnterprise(data.enterprise.cityEnterprise);
-        setEmailManager(data.enterprise.manager.emailUser);
-        setNameManager(data.enterprise.manager.nameUser);
-        setCellphoneManager(data.enterprise.manager.cellphoneNumberUser);
-        console.log(data.enterprise.nit);
-        setNit(data.enterprise.nit);
-
-        // ... (otros campos)
-      })
-      .catch((error) => {
-        console.error("Error al obtener los detalles de la empresa", error);
-      });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3000/api/newCourse", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nit,
-          nameEnterprise,
-          cityEnterprise,
-          nameManager,
-          cellphoneManager,
-          emailManager,
-          courseNumber,
-          nameCourse,
-          nameCourseAssigned,
-          radicado,
-          nis,
-          instructor,
-          responseDate,
-          startDate,
-          radicadoConfirmation,
-          documentNumber: documentNumberAdmin,
-          idState: 1,
-        }),
-      });
-
-      if (response.status === 201) {
-        // El curso se creó exitosamente
-        toast.success("Curso creado exitosamente!");
-        onClose(); // Cierra el modal después de crear el curso
-      } else {
-        // Maneja cualquier otro estado de respuesta, por ejemplo, error de validación
-        const data = await response.json();
-        // alert(`Error al crear el curso: ${data.message}`);
-        toast.error(`Error al crear el curso: ${data.message}`);
-      }
-    } catch (error) {
-      console.error("Error al crear el curso", error);
-      toast.error("Error al crear el curso desde el servidor");
+    // Verifica si la fecha es válida antes de formatearla
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString("es-ES", options);
+    } else {
+      // Si la fecha no es válida, devuelve una cadena vacía o un mensaje de error
+      return "";
     }
   };
 
+  // Manejar cambios en el campo de fecha y hora
+  const handleContactDateChange = (e) => {
+    // Convierte el valor del input a un objeto Date
+    const selectedDate = new Date(e.target.value);
+    // Formatea el objeto Date y establece el resultado en el estado
+    setContactDate(formatDate(selectedDate));
+  };
+
+  const handleSubmit = () => {};
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300`}>
@@ -131,20 +91,13 @@ export const ModalCreateCourse = ({ onClose }) => {
               <label className="block text-sm font-medium text-gray-700">
                 Empresa
               </label>
-              <select
+              <input
+                type="text"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                readOnly // Esto evita que el usuario modifique este campo
                 value={nameEnterprise}
-                onChange={(e) => {
-                  setNameEnterprise(e.target.value);
-                  cargarDetallesEmpresa(e.target.value); // Carga los detalles de la empresa seleccionada
-                }}>
-                <option value="">Seleccione una empresa</option>
-                {empresasOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+                onChange={(e) => setNameEnterprise(e.target.value)}
+              />
             </div>
 
             {/* Datos de la Empresa seleccionada */}
@@ -173,6 +126,7 @@ export const ModalCreateCourse = ({ onClose }) => {
                 onChange={(e) => setNameManager(e.target.value)}
               />
             </div>
+
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700">
                 Teléfono del Manager
@@ -198,17 +152,19 @@ export const ModalCreateCourse = ({ onClose }) => {
                 onChange={(e) => setEmailManager(e.target.value)}
               />
             </div>
+
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700">
-                Radicado
+                NIS
               </label>
               <input
                 type="text"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={radicado}
-                onChange={(e) => setRadicado(e.target.value)}
+                value={nis}
+                onChange={(e) => setNis(e.target.value)}
               />
             </div>
+
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700">
                 Confirmación del Radicado
@@ -218,6 +174,17 @@ export const ModalCreateCourse = ({ onClose }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={radicadoConfirmation}
                 onChange={(e) => setRadicadoConfirmation(e.target.value)}
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Radicado
+              </label>
+              <input
+                type="text"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={radicado}
+                onChange={(e) => setRadicado(e.target.value)}
               />
             </div>
           </div>
@@ -248,25 +215,13 @@ export const ModalCreateCourse = ({ onClose }) => {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700">
-                Formación programada
+                Formación asignada
               </label>
               <input
                 type="text"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={nameCourseAssigned}
                 onChange={(e) => setNameCourseAssigned(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
-                NIS
-              </label>
-              <input
-                type="text"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={nis}
-                onChange={(e) => setNis(e.target.value)}
               />
             </div>
 
@@ -303,6 +258,36 @@ export const ModalCreateCourse = ({ onClose }) => {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Estado
+              </label>
+              <select
+                value={state}
+                onChange={(e) => {
+                  setState(e.target.value);
+                }}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                <option value="1">Pendiente</option>
+                <option value="2">En proceso</option>
+                <option value="3">En curso</option>
+                <option value="4">Finalizado</option>
+                <option value="5">Cancelado</option>
+              </select>
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Fecha de contácto
+              </label>
+              <input
+                type="datetime-local"
+                disabled
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formattedDate}
+                onChange={handleContactDateChange}
               />
             </div>
           </div>

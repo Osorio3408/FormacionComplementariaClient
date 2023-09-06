@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Navbar } from "../../components/Navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Loader2, Send } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
-export const FormCreateEmployee = ({ nit }) => {
+export const FormCreateEmployee = ({ nit, admin }) => {
+  const [rol, setRol] = useState("Employee");
+
   const [formData, setFormData] = useState({
     nameUser: "",
     documentType: "Cédula de ciudadania",
@@ -13,7 +14,7 @@ export const FormCreateEmployee = ({ nit }) => {
     emailUser: "",
     password: "",
     confirmPassword: "",
-    rol: "Employee",
+    rol: rol,
     nit: nit || "", // Si nit no existe, deja el campo vacío
   });
 
@@ -109,6 +110,18 @@ export const FormCreateEmployee = ({ nit }) => {
       className="w-full h-full flex flex-col justify-center items-center gap-y-20"
       action=""
       onSubmit={handleSubmit}>
+      {admin && (
+        <div>
+          <select
+            name="rol"
+            value={rol}
+            onChange={(e) => setRol(e.target.value)}
+            className="max-w-lg border border-gray-400 rounded-md shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1">
+            <option value="Employee">Empleado</option>
+            <option value="Instructor">Instructor</option>
+          </select>
+        </div>
+      )}
       <div>
         <input
           type="text"
@@ -120,6 +133,7 @@ export const FormCreateEmployee = ({ nit }) => {
         />
         {errors.nameUser && <p className="text-red-500">{errors.nameUser}</p>}
       </div>
+
       <div>
         <select
           type="number"
@@ -195,17 +209,19 @@ export const FormCreateEmployee = ({ nit }) => {
         )}
         {errors.passwords && <p className="text-red-500">{errors.passwords}</p>}
       </div>
+      {/* SE EVALUA SI TIENE NO TIENE NIT O ADMIN ES VERDADERO PARA PODER REAUTILIZARLO PARA EL REGISTRO Y CREAR USUARIOS */}
       <div
         className={`max-w-sm xl:max-w-md w-full flex ${
-          nit ? "justify-center" : "justify-between"
+          nit || admin ? "justify-center" : "justify-between"
         } `}>
-        {!nit && (
-          <Link
-            to={"/Login"}
-            className="bg-blue-600 hover:bg-blue-700 px-12 py-6 text-lg text-white">
-            Volver
-          </Link>
-        )}
+        {!nit ||
+          (admin && (
+            <Link
+              to={"/Login"}
+              className="bg-blue-600 hover:bg-blue-700 px-12 py-6 text-lg text-white">
+              Volver
+            </Link>
+          ))}
         <button className="bg-blue-600 rounded-md hover:bg-blue-700 px-12 py-6 text-lg text-white">
           {loading ? (
             <Loader2 color="white" size={10} className="animate-spin" />
@@ -214,18 +230,19 @@ export const FormCreateEmployee = ({ nit }) => {
           )}
         </button>
       </div>
-      {!nit && (
-        <div className="text-lg">
-          <p className="font-medium flex gap-4">
-            ¿Ya tienes una cuenta?
-            <Link
-              to={"/Login"}
-              className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
-              Inicia sesión
-            </Link>
-          </p>
-        </div>
-      )}
+      {!nit ||
+        (admin && (
+          <div className="text-lg">
+            <p className="font-medium flex gap-4">
+              ¿Ya tienes una cuenta?
+              <Link
+                to={"/Login"}
+                className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
+                Inicia sesión
+              </Link>
+            </p>
+          </div>
+        ))}
     </form>
   );
 };

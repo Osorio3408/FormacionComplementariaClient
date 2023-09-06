@@ -1,9 +1,32 @@
-import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import { MoreHorizontal, Plus } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { ModalCreateCourse } from "../ModalCreateCourse/ModalCreateCourse";
+import { ModalEditCourse } from "../ModalEditCourse/ModalEditCourse";
 
 export const CreateAssingCourse = () => {
   const [openModalCreateCourse, setOpenModalCreateCourse] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [assignedCourse, setAssignedCourse] = useState();
+  const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/getCourses")
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        setCourses(res);
+      });
+  }, [openModalCreateCourse, openModalEditCourse]);
+
+  const estadoCurso = {
+    1: "Pendiente",
+    2: "En proceso",
+    3: "En curso",
+    4: "Finalizado",
+    5: "Cancelado",
+  };
+
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="w-full flex justify-end">
@@ -26,12 +49,61 @@ export const CreateAssingCourse = () => {
             <th className="border border-slate-300 px-4 py-2">Opciones</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {courses.map((course) => (
+            <tr>
+              <td className="border border-slate-300 px-4 py-2">
+                {course.course.courseNumber === ""
+                  ? "NO ASIGNADO"
+                  : course.course.courseNumber}
+              </td>
+              <td className="border border-slate-300 px-4 py-2">
+                {course.course.nameCourse === ""
+                  ? course.course.nameCourseAssigned
+                  : course.course.nameCourse}
+              </td>
+              <td className="border border-slate-300 px-4 py-2">
+                {course.enterprise.nameEnterprise === ""
+                  ? "NO ASIGNADO"
+                  : course.enterprise.nameEnterprise}
+              </td>
+              <td className="border border-slate-300 px-4 py-2">
+                {course.course.instructor === ""
+                  ? "NO ASIGNADO"
+                  : course.course.instructor}
+              </td>
+              <td className="border border-slate-300 px-4 py-2">
+                {estadoCurso[course.idState]}
+              </td>
+              <td className="border border-slate-300 px-4 py-2 text-center">
+                <span
+                  className="flex justify-center"
+                  onClick={() => {
+                    setOpenModalEditCourse(true);
+                    setAssignedCourse(course);
+                  }}>
+                  <MoreHorizontal
+                    className="rotate-90 hover:rotate-0 duration-500 hover:text-indigo-600 transition-all cursor-pointer"
+                    size={24}
+                  />
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
       {openModalCreateCourse && (
         <ModalCreateCourse
           onClose={() => {
             setOpenModalCreateCourse(false);
+          }}
+        />
+      )}
+      {openModalEditCourse && (
+        <ModalEditCourse
+          assignedCourse={assignedCourse}
+          onClose={() => {
+            setOpenModalEditCourse(false);
           }}
         />
       )}

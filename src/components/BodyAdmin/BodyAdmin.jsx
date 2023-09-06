@@ -3,6 +3,7 @@ import { FormCreateManager } from "../FormCreateManager/FormCreateManager";
 import { FormCreateUser } from "../FormCreateUser/FormCreateUser";
 import { LogOut } from "lucide-react";
 import { CreateAssingCourse } from "../CreateAssingCourse/CreateAssingCourse";
+import { FormCreateEmployee } from "../FormCreateEmployee/FormCreateEmployee";
 
 export const BodyAdmin = ({ handleLogout }) => {
   const [selectedTab, setSelectedTab] = useState("empresarial");
@@ -19,6 +20,15 @@ export const BodyAdmin = ({ handleLogout }) => {
             }`}
             onClick={() => setSelectedTab("empresarial")}>
             Crear cuenta encargado/empresa
+          </li>
+          <li
+            className={`cursor-pointer py-2 ${
+              selectedTab === "CreateEmployee"
+                ? "border-b border-blue-600 text-blue-600"
+                : "hover:border-b hover:border-neutral-400"
+            }`}
+            onClick={() => setSelectedTab("CreateEmployee")}>
+            Crear cuenta empleado
           </li>
           <li
             className={`cursor-pointer py-2 ${
@@ -40,6 +50,9 @@ export const BodyAdmin = ({ handleLogout }) => {
       </div>
       <div className="mx-4 py-10 h-full ">
         {selectedTab === "empresarial" && <FormCreateManager />}
+        {selectedTab === "CreateEmployee" && (
+          <FormCreateEmployee admin={true} />
+        )}
         {selectedTab === "CreateAssignCourse" && <CreateAssingCourse />}
         {/* {selectedTab === "empresarial" && <FormCreateManager />} */}
       </div>
