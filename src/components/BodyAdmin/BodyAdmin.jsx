@@ -28,7 +28,7 @@ export const BodyAdmin = ({ handleLogout }) => {
                 : "hover:border-b hover:border-neutral-400"
             }`}
             onClick={() => setSelectedTab("CreateEmployee")}>
-            Crear cuenta empleado
+            Crear cuenta Empleado/Instructor
           </li>
           <li
             className={`cursor-pointer py-2 ${

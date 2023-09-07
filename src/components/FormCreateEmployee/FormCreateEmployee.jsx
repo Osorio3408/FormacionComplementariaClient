@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 
 export const FormCreateEmployee = ({ nit, admin }) => {
-  const [rol, setRol] = useState("Employee");
+  // const [rol, setRol] = useState("Instructor");
 
   const [formData, setFormData] = useState({
     nameUser: "",
@@ -14,7 +14,7 @@ export const FormCreateEmployee = ({ nit, admin }) => {
     emailUser: "",
     password: "",
     confirmPassword: "",
-    rol: rol,
+    rol: admin ? "Instructor" : "Employee",
     nit: nit || "", // Si nit no existe, deja el campo vacío
   });
 
@@ -77,6 +77,10 @@ export const FormCreateEmployee = ({ nit, admin }) => {
           body: JSON.stringify(formData),
         });
 
+        const data = await response.json();
+
+        console.log(data);
+
         if (response.ok) {
           // Vaciar los campos del formulario
           setFormData({
@@ -87,6 +91,7 @@ export const FormCreateEmployee = ({ nit, admin }) => {
             emailUser: "",
             password: "",
             confirmPassword: "",
+            rol: admin ? "Instructor" : "Employee",
           });
 
           // Restablecer los errores
@@ -94,7 +99,7 @@ export const FormCreateEmployee = ({ nit, admin }) => {
           toast.success("Se ha creado la cuenta exitosamente!");
           navigate("/");
         } else {
-          toast.error("Error al crear la cuenta");
+          toast.error("Error al crear la cuenta E");
         }
       } catch (error) {
         console.error("Error al crear la cuenta:", error);
@@ -114,8 +119,8 @@ export const FormCreateEmployee = ({ nit, admin }) => {
         <div>
           <select
             name="rol"
-            value={rol}
-            onChange={(e) => setRol(e.target.value)}
+            value={formData.rol}
+            onChange={handleInputChange}
             className="max-w-lg border border-gray-400 rounded-md shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1">
             <option value="Employee">Empleado</option>
             <option value="Instructor">Instructor</option>

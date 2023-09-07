@@ -16,6 +16,7 @@ export const CreateAssingCourse = () => {
       })
       .then((res) => {
         setCourses(res);
+        console.log(res);
       });
   }, [openModalCreateCourse, openModalEditCourse]);
 
@@ -58,9 +59,9 @@ export const CreateAssingCourse = () => {
                   : course.course.courseNumber}
               </td>
               <td className="border border-slate-300 px-4 py-2">
-                {course.course.nameCourse === ""
-                  ? course.course.nameCourseAssigned
-                  : course.course.nameCourse}
+                {course.course.nameCourseAssigned === ""
+                  ? course.course.nameCourse
+                  : course.course.nameCourseAssigned}
               </td>
               <td className="border border-slate-300 px-4 py-2">
                 {course.enterprise.nameEnterprise === ""

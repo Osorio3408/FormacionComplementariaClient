@@ -5,27 +5,58 @@ import { useUserContext } from "../../Context/UserContext";
 import jwtDecode from "jwt-decode";
 
 export const ModalCreateCourse = ({ onClose }) => {
-  // Estados para los campos de entrada
-  const [nameEnterprise, setNameEnterprise] = useState("");
-  const [nit, setNit] = useState("");
-  const [cityEnterprise, setCityEnterprise] = useState("");
-  const [nameManager, setNameManager] = useState("");
-  const [cellphoneManager, setCellphoneManager] = useState("");
-  const [emailManager, setEmailManager] = useState("");
-  const [courseNumber, setCourseNumber] = useState("");
-  const [nameCourse, setNameCourse] = useState("");
-  const [nameCourseAssigned, setNameCourseAssigned] = useState("");
-  const [radicado, setRadicado] = useState("");
-  const [nis, setNis] = useState("");
-  const [instructor, setInstructor] = useState("");
-  const [responseDate, setResponseDate] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [radicadoConfirmation, setRadicadoConfirmation] = useState("");
-  const [documentNumberAdmin, setDocumentNumberAdmin] = useState("");
+  // Nuevo estado para almacenar la lista de instructores
+  const [instructors, setInstructors] = useState([]);
+
+  // Nuevo estado para almacenar la selección del instructor
+  const [selectedInstructor, setSelectedInstructor] = useState("");
+
+  // Estado para almacenar el documento del instructor seleccionado
+  const [selectedInstructorDocument, setSelectedInstructorDocument] =
+    useState("");
+
+  useEffect(() => {
+    // Obtener la lista de instructores del backend
+    fetch("http://localhost:3000/api/getInstructors")
+      .then((response) => response.json())
+      .then((data) => {
+        // Actualizar el estado con la lista de instructores
+        setInstructors(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener la lista de instructores", error);
+      });
+  }, []);
+
+  // Estado para todos los campos del formulario
+  const [formData, setFormData] = useState({
+    nameEnterprise: "",
+    nit: "",
+    cityEnterprise: "",
+    nameManager: "",
+    cellphoneManager: "",
+    emailManager: "",
+    courseNumber: "",
+    nameCourse: "",
+    nameCourseAssigned: "",
+    radicado: "",
+    nis: "",
+    instructor: selectedInstructor,
+    responseDate: "",
+    startDate: "",
+    finishDate: "",
+    minRequirement: 0,
+    radicadoConfirmation: "",
+    inscribeedNumber: 0,
+    documentNumberTeacher: selectedInstructorDocument,
+    documentNumber: "",
+  });
+
   // Estado para almacenar las opciones de empresas
   const [empresasOptions, setEmpresasOptions] = useState([]);
 
   const { getTokenFromCookies } = useUserContext();
+
   // Obtener las opciones de empresas desde la API
   useEffect(() => {
     fetch("http://localhost:3000/api/enterprises") // Ajusta la URL de la API según tu configuración
@@ -43,7 +74,10 @@ export const ModalCreateCourse = ({ onClose }) => {
     const token = getTokenFromCookies();
     const { userId } = jwtDecode(token);
     console.log(userId);
-    setDocumentNumberAdmin(userId);
+    setFormData((prevData) => ({
+      ...prevData,
+      documentNumber: userId,
+    }));
   }, []);
 
   // Función para cargar los detalles de la empresa seleccionada
@@ -52,15 +86,16 @@ export const ModalCreateCourse = ({ onClose }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        // Actualiza los estados con los detalles de la empresa
-        setCityEnterprise(data.enterprise.cityEnterprise);
-        setEmailManager(data.enterprise.manager.emailUser);
-        setNameManager(data.enterprise.manager.nameUser);
-        setCellphoneManager(data.enterprise.manager.cellphoneNumberUser);
-        console.log(data.enterprise.nit);
-        setNit(data.enterprise.nit);
-
-        // ... (otros campos)
+        // Actualiza el estado con los detalles de la empresa
+        setFormData((prevData) => ({
+          ...prevData,
+          cityEnterprise: data.enterprise.cityEnterprise,
+          emailManager: data.enterprise.manager.emailUser,
+          nameManager: data.enterprise.manager.nameUser,
+          cellphoneManager: data.enterprise.manager.cellphoneNumberUser,
+          nit: data.enterprise.nit,
+          // ... (otros campos)
+        }));
       })
       .catch((error) => {
         console.error("Error al obtener los detalles de la empresa", error);
@@ -70,28 +105,14 @@ export const ModalCreateCourse = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(formData.instructor);
       const response = await fetch("http://localhost:3000/api/newCourse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nit,
-          nameEnterprise,
-          cityEnterprise,
-          nameManager,
-          cellphoneManager,
-          emailManager,
-          courseNumber,
-          nameCourse,
-          nameCourseAssigned,
-          radicado,
-          nis,
-          instructor,
-          responseDate,
-          startDate,
-          radicadoConfirmation,
-          documentNumber: documentNumberAdmin,
+          ...formData, // Envía todos los campos del formulario en el cuerpo de la solicitud
           idState: 1,
         }),
       });
@@ -103,12 +124,39 @@ export const ModalCreateCourse = ({ onClose }) => {
       } else {
         // Maneja cualquier otro estado de respuesta, por ejemplo, error de validación
         const data = await response.json();
-        // alert(`Error al crear el curso: ${data.message}`);
         toast.error(`Error al crear el curso: ${data.message}`);
       }
     } catch (error) {
       console.error("Error al crear el curso", error);
       toast.error("Error al crear el curso desde el servidor");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Actualiza el estado de formData
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Si el campo modificado es "instructor", actualiza también "documentNumberTeacher"
+    if (name === "instructor") {
+      const selectedInstructorData = instructors.find(
+        (instructor) => instructor.nameUser === value
+      );
+
+      setSelectedInstructorDocument(
+        selectedInstructorData?.documentNumber || ""
+      );
+
+      // Actualiza el instructor seleccionado en formData
+      setFormData((prevData) => ({
+        ...prevData,
+        instructor: value,
+        documentNumberTeacher: selectedInstructorData?.documentNumber || "",
+      }));
     }
   };
 
@@ -128,14 +176,15 @@ export const ModalCreateCourse = ({ onClose }) => {
           <div>
             {/* Empresa */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Empresa
               </label>
               <select
+                name="nameEnterprise"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={nameEnterprise}
+                value={formData.nameEnterprise}
                 onChange={(e) => {
-                  setNameEnterprise(e.target.value);
+                  handleInputChange(e);
                   cargarDetallesEmpresa(e.target.value); // Carga los detalles de la empresa seleccionada
                 }}>
                 <option value="">Seleccione una empresa</option>
@@ -149,75 +198,93 @@ export const ModalCreateCourse = ({ onClose }) => {
 
             {/* Datos de la Empresa seleccionada */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Ciudad
               </label>
               <input
                 type="text"
+                name="cityEnterprise"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 readOnly // Esto evita que el usuario modifique este campo
-                value={cityEnterprise}
-                onChange={(e) => setCityEnterprise(e.target.value)}
+                value={formData.cityEnterprise}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Nombre del Encargado (Manager)
               </label>
               <input
                 type="text"
+                name="nameManager"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 readOnly
-                value={nameManager}
-                onChange={(e) => setNameManager(e.target.value)}
+                value={formData.nameManager}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Teléfono del Manager
               </label>
               <input
                 type="text"
+                name="cellphoneManager"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 readOnly
-                value={cellphoneManager}
-                onChange={(e) => setCellphoneManager(e.target.value)}
+                value={formData.cellphoneManager}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Correo del Manager
               </label>
               <input
                 type="text"
+                name="emailManager"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 readOnly
-                value={emailManager}
-                onChange={(e) => setEmailManager(e.target.value)}
+                value={formData.emailManager}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Radicado
               </label>
               <input
                 type="text"
+                name="radicado"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={radicado}
-                onChange={(e) => setRadicado(e.target.value)}
+                value={formData.radicado}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Confirmación del Radicado
               </label>
               <input
                 type="text"
+                name="radicadoConfirmation"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={radicadoConfirmation}
-                onChange={(e) => setRadicadoConfirmation(e.target.value)}
+                value={formData.radicadoConfirmation}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-gray-700">
+                NIS
+              </label>
+              <input
+                type="text"
+                name="nis"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.nis}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -225,84 +292,110 @@ export const ModalCreateCourse = ({ onClose }) => {
           {/* Columna derecha */}
           <div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Número de Ficha
               </label>
               <input
                 type="text"
+                name="courseNumber"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={courseNumber}
-                onChange={(e) => setCourseNumber(e.target.value)}
+                value={formData.courseNumber}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Formación solicitada
               </label>
               <input
                 type="text"
+                name="nameCourse"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={nameCourse}
-                onChange={(e) => setNameCourse(e.target.value)}
+                value={formData.nameCourse}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Formación programada
               </label>
               <input
                 type="text"
+                name="nameCourseAssigned"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={nameCourseAssigned}
-                onChange={(e) => setNameCourseAssigned(e.target.value)}
+                value={formData.nameCourseAssigned}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
-                NIS
-              </label>
-              <input
-                type="text"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={nis}
-                onChange={(e) => setNis(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Instructor
               </label>
+              <select
+                name="instructor"
+                value={formData.instructor}
+                onChange={handleInputChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                <option value="">Selecciona un instructor</option>
+                {instructors.map((instructor) => (
+                  <option
+                    key={instructor.documentNumber}
+                    value={instructor.nameUser}>
+                    {instructor.nameUser}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-gray-700">
+                Minimo de aprendices requeridos
+              </label>
               <input
-                type="text"
+                type="number"
+                name="minRequirement"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={instructor}
-                onChange={(e) => setInstructor(e.target.value)}
+                value={formData.minRequirement}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Fecha de Respuesta
               </label>
               <input
                 type="date"
+                name="responseDate"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={responseDate}
-                onChange={(e) => setResponseDate(e.target.value)}
+                value={formData.responseDate}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Fecha de Inicio
               </label>
               <input
                 type="date"
+                name="startDate"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                value={formData.startDate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-gray-700">
+                Fecha de Finalización
+              </label>
+              <input
+                type="date"
+                name="finishDate"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.finishDate}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -317,7 +410,7 @@ export const ModalCreateCourse = ({ onClose }) => {
           <button
             onClick={handleSubmit}
             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
-            Guardar Cambioss
+            Guardar Cambios
           </button>
         </div>
       </div>
