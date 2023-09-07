@@ -62,8 +62,10 @@ export const BodyManager = ({ handleLogout, nit }) => {
 
       <div className="mx-4 py-10 h-full ">
         {selectedTab == "newEmployees" && <Upload nit={nit} />}
-        {selectedTab == "newEmployee" && <FormCreateEmployee nit={nit} />}
-        {selectedTab == "seeCourses" && <ListCoursesManager />}
+        {selectedTab == "newEmployee" && (
+          <FormCreateEmployee admin={false} nit={nit} />
+        )}
+        {selectedTab == "seeCourses" && <ListCoursesManager Employee={false} />}
         {selectedTab == "seeEmployees" && <ListEmployees nit={nit} />}
       </div>
     </div>

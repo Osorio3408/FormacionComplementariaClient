@@ -13,6 +13,7 @@ export const Home = () => {
   const navigate = useNavigate();
   const [rol, setRol] = useState("");
   const [nit, setNit] = useState("");
+  const [documentNumber, setDocumentNumber] = useState();
 
   const isAuthenticated = Cookies.get("token");
   const { clearToken, getTokenFromCookies } = useUserContext();
@@ -20,10 +21,10 @@ export const Home = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const token = getTokenFromCookies();
-      const tokensito = jwtDecode(token);
-      console.log(tokensito);
-      const { rol, nit, documentNumber } = jwtDecode(token);
-      console.log(documentNumber);
+      // const tokensito = jwtDecode(token);
+      // console.log(tokensito);
+      const { rol, nit, userId } = jwtDecode(token);
+      setDocumentNumber(userId);
       setNit(nit);
       setRol(rol);
     }
@@ -44,10 +45,13 @@ export const Home = () => {
   return (
     <div className="min-h-screen  min-w-full flex flex-col justify-center items-center">
       <Navbar title={"Formación Complementaria"} />
-      {rol === "employee" && <BodyEmployee />}
+      {rol === "Employee" && (
+        <BodyEmployee handleLogout={handleLogout} nit={nit} />
+      )}
       {rol == "manager" && (
         <BodyManager handleLogout={handleLogout} nit={nit} />
       )}
+
       {rol === "admin" && <BodyAdmin handleLogout={handleLogout} />}
     </div>
   );

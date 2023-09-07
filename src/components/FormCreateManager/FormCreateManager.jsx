@@ -106,7 +106,7 @@ export const FormCreateManager = () => {
     <form
       className="flex flex-col justify-between h-full"
       onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 gap-y-10 md:grid-cols-2 place-content-between">
+      <div className="grid grid-cols-2 gap-y-10 lg:grid-cols-3 gap-x-10 place-content-center ">
         <div className="flex flex-col gap-2">
           <label htmlFor="nameUser" className="text-xl">
             Nombre del encargado:
@@ -117,7 +117,7 @@ export const FormCreateManager = () => {
             value={formDataE.nameUser}
             name="nameUser"
             type="text"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Nombre del encargado..."
           />
         </div>
@@ -130,7 +130,7 @@ export const FormCreateManager = () => {
             name="documentType"
             value={formDataE.documentType}
             onChange={handleInputChangeE}
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1">
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md">
             <option value="Cédula de ciudadania">Cédula de ciudadanía</option>
             <option value="Cédula de extranjeria">Cédula de extranjería</option>
             <option value="Registro civil">Registro civil</option>
@@ -147,7 +147,7 @@ export const FormCreateManager = () => {
             value={formDataE.documentNumber}
             name="documentNumber"
             type="number"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Número de documento..."
           />
         </div>
@@ -161,7 +161,7 @@ export const FormCreateManager = () => {
             value={formDataE.cellphoneNumberUser}
             name="cellphoneNumberUser"
             type="number"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Número de celular..."
           />
         </div>
@@ -175,7 +175,7 @@ export const FormCreateManager = () => {
             value={formDataE.emailUser}
             name="emailUser"
             type="email"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Correo electrónico..."
           />
         </div>
@@ -189,7 +189,7 @@ export const FormCreateManager = () => {
             value={formDataE.password}
             name="password"
             type="password"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Contraseña..."
           />
         </div>
@@ -203,7 +203,7 @@ export const FormCreateManager = () => {
             value={formDataE.confirmPassword}
             name="confirmPassword"
             type="password"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Repite la contraseña..."
           />
         </div>
@@ -217,7 +217,7 @@ export const FormCreateManager = () => {
             value={formDataE.nameEnterprise}
             name="nameEnterprise"
             type="text"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Nombre de la empresa..."
           />
         </div>
@@ -231,7 +231,7 @@ export const FormCreateManager = () => {
             value={formDataE.address}
             name="address"
             type="text"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Dirección de la empresa..."
           />
         </div>
@@ -245,7 +245,7 @@ export const FormCreateManager = () => {
             value={formDataE.cellphoneNumberEnterprise}
             name="cellphoneNumberEnterprise"
             type="number"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Número telefónico de la empresa..."
           />
         </div>
@@ -259,7 +259,7 @@ export const FormCreateManager = () => {
             value={formDataE.cityEnterprise}
             name="cityEnterprise"
             type="text"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Ciudad de la empresa..."
           />
         </div>
@@ -273,7 +273,7 @@ export const FormCreateManager = () => {
             value={formDataE.nit}
             name="nit"
             type="text"
-            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1"
+            className="max-w-lg border border-neutral-400 shadow-md h-[60px] w-full text-lg px-4 py-1 rounded-md"
             placeholder="Ingrese Nit de la empresa..."
           />
         </div>

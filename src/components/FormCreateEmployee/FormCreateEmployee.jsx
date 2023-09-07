@@ -216,17 +216,16 @@ export const FormCreateEmployee = ({ nit, admin }) => {
       </div>
       {/* SE EVALUA SI TIENE NO TIENE NIT O ADMIN ES VERDADERO PARA PODER REAUTILIZARLO PARA EL REGISTRO Y CREAR USUARIOS */}
       <div
-        className={`max-w-sm xl:max-w-md w-full flex ${
+        className={`max-w-sm xl:max-w-md w-full flex gap-x-10 ${
           nit || admin ? "justify-center" : "justify-between"
         } `}>
-        {!nit ||
-          (admin && (
-            <Link
-              to={"/Login"}
-              className="bg-blue-600 hover:bg-blue-700 px-12 py-6 text-lg text-white">
-              Volver
-            </Link>
-          ))}
+        {!nit && (
+          <Link
+            to={"/Login"}
+            className="bg-blue-600 hover:bg-blue-700 rounded-md px-12 py-6 text-lg text-white">
+            Volver
+          </Link>
+        )}
         <button className="bg-blue-600 rounded-md hover:bg-blue-700 px-12 py-6 text-lg text-white">
           {loading ? (
             <Loader2 color="white" size={10} className="animate-spin" />
@@ -235,19 +234,18 @@ export const FormCreateEmployee = ({ nit, admin }) => {
           )}
         </button>
       </div>
-      {!nit ||
-        (admin && (
-          <div className="text-lg">
-            <p className="font-medium flex gap-4">
-              ¿Ya tienes una cuenta?
-              <Link
-                to={"/Login"}
-                className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
-                Inicia sesión
-              </Link>
-            </p>
-          </div>
-        ))}
+      {!nit && (
+        <div className="text-lg">
+          <p className="font-medium flex gap-4">
+            ¿Ya tienes una cuenta?
+            <Link
+              to={"/Login"}
+              className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
+              Inicia sesión
+            </Link>
+          </p>
+        </div>
+      )}
     </form>
   );
 };

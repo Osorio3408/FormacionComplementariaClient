@@ -100,20 +100,17 @@ export const AddEmployee = ({ onClose, nit, fetchEmployees }) => {
           </select>
         </div>
 
-        {/* Botón para guardar el empleado seleccionado */}
-        {selectedEmployee && (
-          <div className="flex justify-end mt-5">
+        <div className="flex justify-end mt-2 items-center gap-x-4">
+          {/* Botón para guardar el empleado seleccionado */}
+          {selectedEmployee && (
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
               onClick={handleSaveEmployee}>
               Guardar Empleado
             </button>
-          </div>
-        )}
-
-        <div className="flex justify-end mt-2">
+          )}
           <button
-            className="text-white bg-red-500 mr-4 py-2 px-5 rounded-md"
+            className="text-white bg-red-500 mr-4 py-2 px-6 rounded-md"
             onClick={onClose}>
             Cerrar
           </button>

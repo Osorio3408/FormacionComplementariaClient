@@ -77,6 +77,7 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
           responseDate: formData.responseDate,
           startDate: formData.startDate,
           radicadoConfirmation: formData.radicadoConfirmation,
+          inscribeedNumber: formData.inscribeedNumber,
           minRequirement: data.course.minRequirement, // No tengo el valor actual de minRequirement en formData, así que lo tomo de data
         },
         documentNumberTeacher: selectedInstructor
@@ -356,7 +357,7 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
                 type="text"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.inscribeedNumber}
-                disabled
+                readOnly
               />
             </div>
 

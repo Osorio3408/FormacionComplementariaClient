@@ -51,7 +51,7 @@ export const BodyAdmin = ({ handleLogout }) => {
       <div className="mx-4 py-10 h-full ">
         {selectedTab === "empresarial" && <FormCreateManager />}
         {selectedTab === "CreateEmployee" && (
-          <FormCreateEmployee admin={true} />
+          <FormCreateEmployee admin={true} nit={" "} />
         )}
         {selectedTab === "CreateAssignCourse" && <CreateAssingCourse />}
         {/* {selectedTab === "empresarial" && <FormCreateManager />} */}
