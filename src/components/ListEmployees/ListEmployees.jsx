@@ -4,12 +4,14 @@ import { useUserContext } from "../../Context/UserContext";
 import { Delete, Edit, Pencil, Trash } from "lucide-react";
 import { ModalEditEmployee } from "../ModalEditEmployee/ModalEditEmployee";
 import { ModalDeleteEmployeed } from "../ModalDeleteEmployeed/ModalDeleteEmployeed";
+import { AddEmployee } from "../AddEmployee/AddEmployee";
 
 export const ListEmployees = ({ nit }) => {
   const [employees, setEmployees] = useState([]);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [selectedDocumentNumber, setSelectedDocumentNumber] = useState("");
+  const [addEmployee, setAddEmployee] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/getEmployees/${nit}`)
@@ -21,6 +23,17 @@ export const ListEmployees = ({ nit }) => {
       });
   }, []);
 
+  const fetchEmployees = () => {
+    fetch(`http://localhost:3000/api/getEmployees/${nit}`)
+      .then((response) => response.json())
+      .then((res) => {
+        setEmployees(res);
+      })
+      .catch((error) => {
+        console.error("Error al obtener la lista de empleados:", error);
+      });
+  };
+
   const [nameEnterprise, setNameEnterprise] = useState("");
   const { getTokenFromCookies } = useUserContext();
 
@@ -31,11 +44,17 @@ export const ListEmployees = ({ nit }) => {
     setNameEnterprise(nameEnterprise);
   }, []);
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen relative">
       <h2 className="text-2xl font-semibold text-center">
         Lista de empleados de la empresa{" "}
-        {/* <span className="font-bold text-3xl">{nameEnterprise}</span> */}
       </h2>
+      <button
+        onClick={() => {
+          setAddEmployee(true);
+        }}
+        className="absolute right-0 top-0 bg-blue-500 text-white px-5 py-2 rounded-md">
+        Añadir empleado
+      </button>
       <table className="mt-4 w-full border-collapse border border-slate-300">
         <thead>
           <tr>
@@ -102,6 +121,13 @@ export const ListEmployees = ({ nit }) => {
           ))}
         </tbody>
       </table>
+      {addEmployee && (
+        <AddEmployee
+          onClose={() => setAddEmployee(false)}
+          nit={nit}
+          fetchEmployees={fetchEmployees}
+        />
+      )}
       {isModalEditOpen && (
         <ModalEditEmployee
           documentNumber={selectedDocumentNumber}
