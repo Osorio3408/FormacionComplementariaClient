@@ -111,6 +111,7 @@ export const ListEmployees = ({ nit }) => {
                   <Trash
                     onClick={() => {
                       setIsModalDeleteOpen(true);
+                      setSelectedDocumentNumber(employee["documentNumber"]);
                     }}
                     size={18}
                     className="text-neutral-600 cursor-pointer hover:text-red-500 transition-all duration-300"
@@ -130,6 +131,7 @@ export const ListEmployees = ({ nit }) => {
       )}
       {isModalEditOpen && (
         <ModalEditEmployee
+          fetchEmployees={fetchEmployees}
           documentNumber={selectedDocumentNumber}
           isOpen={isModalEditOpen}
           onClose={() => setIsModalEditOpen(false)}
@@ -137,6 +139,7 @@ export const ListEmployees = ({ nit }) => {
       )}
       {isModalDeleteOpen && (
         <ModalDeleteEmployeed
+          fetchEmployees={fetchEmployees}
           documentNumber={selectedDocumentNumber}
           isOpen={isModalDeleteOpen}
           onClose={() => setIsModalDeleteOpen(false)}

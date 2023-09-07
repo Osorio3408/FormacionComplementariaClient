@@ -1,6 +1,31 @@
 import React from "react";
+import { toast } from "react-toastify";
 
-export const ModalDeleteEmployeed = ({ isOpen, onClose, documentNumber }) => {
+export const ModalDeleteEmployeed = ({
+  isOpen,
+  onClose,
+  documentNumber,
+  fetchEmployees,
+}) => {
+  console.log(documentNumber);
+  const handleDeleteEmployee = () => {
+    fetch(`http://localhost:3000/api/deleteEmployee/${documentNumber}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // Realiza alguna acción adicional después de la eliminación exitosa
+          toast.success("Empleado eliminado exitosamente");
+          fetchEmployees();
+          onClose()
+        } else {
+          toast.error("Error al eliminar el empleado");
+        }
+      })
+      .catch((error) => {
+        console.error("Error al eliminar el empleado:", error);
+      });
+  };
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300`}>
@@ -15,7 +40,9 @@ export const ModalDeleteEmployeed = ({ isOpen, onClose, documentNumber }) => {
             onClick={onClose}>
             Cancelar
           </button>
-          <button className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md">
+          <button
+            onClick={handleDeleteEmployee}
+            className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md">
             Eliminar
           </button>
         </div>

@@ -1,19 +1,74 @@
 import React, { useEffect, useState } from "react";
 import { Pencil, X } from "lucide-react";
+import { toast } from "react-toastify";
 
-export const ModalEditEmployee = ({ isOpen, onClose, documentNumber }) => {
-  const [employeed, setEmployeed] = useState(0);
+export const ModalEditEmployee = ({
+  isOpen,
+  onClose,
+  documentNumber,
+  fetchEmployees,
+}) => {
+  const [employeeData, setEmployeeData] = useState({
+    nameUser: "",
+    documentNumber: 0,
+    cellphoneNumberUser: 0,
+    emailUser: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/getEmployeed/${documentNumber}`)
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((res) => {
-        setEmployeed(res[0]);
+        setEmployeeData(res[0]);
         console.log(res[0]);
       });
-  }, []);
+  }, [documentNumber]);
+
+  // Función para manejar cambios en los campos de entrada
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEmployeeData({
+      ...employeeData,
+      [name]: value,
+    });
+  };
+
+  const handleSaveEmployee = () => {
+    try {
+      fetch(`http://localhost:3000/api/editEmployee/${documentNumber}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(employeeData),
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            // Puedes realizar alguna acción adicional después de la edición exitosa
+            toast.success("Empleado editado correctamente");
+            fetchEmployees();
+          } else {
+            toast.error("Error al editar el empleado");
+          }
+          return res.json();
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.error("Error al editar el empleado:", error);
+      setErrorMessage("Error al editar el empleado");
+    }
+
+    // Cierra el modal después de editar o si hay un error
+    onClose();
+  };
+
+  // ...
+
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300`}>
@@ -25,27 +80,42 @@ export const ModalEditEmployee = ({ isOpen, onClose, documentNumber }) => {
         <input
           type="text"
           className="w-full border border-gray-300 px-3 py-2 rounded-md mb-4"
-          defaultValue={employeed.nameUser}
+          name="nameUser"
+          value={employeeData.nameUser}
+          onChange={handleInputChange}
           placeholder="Nombre completo"
         />
         <input
           type="number"
           className="w-full border border-gray-300 px-3 py-2 rounded-md mb-4"
-          defaultValue={employeed.documentNumber}
+          name="documentNumber"
+          value={employeeData.documentNumber}
+          onChange={handleInputChange}
           placeholder="Número de documento"
         />
         <input
           type="number"
           className="w-full border border-gray-300 px-3 py-2 rounded-md mb-4"
-          defaultValue={employeed.cellphoneNumberUser}
+          name="cellphoneNumberUser"
+          value={employeeData.cellphoneNumberUser}
+          onChange={handleInputChange}
           placeholder="Número de celular"
         />
         <input
           type="email"
           className="w-full border border-gray-300 px-3 py-2 rounded-md mb-4"
-          defaultValue={employeed.emailUser}
+          name="emailUser"
+          value={employeeData.emailUser}
+          onChange={handleInputChange}
           placeholder="Correo electrónico"
         />
+
+        {errorMessage && (
+          <div className="text-red-500 mb-4">{errorMessage}</div>
+        )}
+        {successMessage && (
+          <div className="text-green-500 mb-4">{successMessage}</div>
+        )}
 
         <div className="flex justify-end mt-5">
           <button
@@ -53,7 +123,9 @@ export const ModalEditEmployee = ({ isOpen, onClose, documentNumber }) => {
             onClick={onClose}>
             Cancelar
           </button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            onClick={handleSaveEmployee}>
             Guardar Cambios
           </button>
         </div>
