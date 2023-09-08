@@ -14,7 +14,7 @@ export const ListEmployees = ({ nit }) => {
   const [addEmployee, setAddEmployee] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/getEmployees/${nit}`)
+    fetch(`https://serverformacion.up.railway.app/api/getEmployees/${nit}`)
       .then((response) => {
         return response.json();
       })
@@ -24,7 +24,7 @@ export const ListEmployees = ({ nit }) => {
   }, []);
 
   const fetchEmployees = () => {
-    fetch(`http://localhost:3000/api/getEmployees/${nit}`)
+    fetch(`https://serverformacion.up.railway.app/api/getEmployees/${nit}`)
       .then((response) => response.json())
       .then((res) => {
         setEmployees(res);

@@ -10,7 +10,7 @@ export const CreateAssingCourse = () => {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/getCourses")
+    fetch("https://serverformacion.up.railway.app/api/getCourses")
       .then((response) => {
         return response.json();
       })

@@ -8,6 +8,7 @@ import jwtDecode from "jwt-decode";
 import { BodyManager } from "../../components/BodyManager/BodyManager";
 import { BodyAdmin } from "../../components/BodyAdmin/BodyAdmin";
 import { BodyEmployee } from "../../components/BodyEmployee/BodyEmployee";
+import { BodyInstructor } from "../../components/BodyInstructor/BodyInstructor";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -52,7 +53,9 @@ export const Home = () => {
         <BodyManager handleLogout={handleLogout} nit={nit} />
       )}
 
-      {rol === "admin" && <BodyAdmin handleLogout={handleLogout} />}
+      {rol == "Instructor" && <BodyInstructor handleLogout={handleLogout} />}
+
+      {rol === "admin" && <BodyAdmin handleLogout={handleLogout} nit={nit} />}
     </div>
   );
 };

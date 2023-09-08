@@ -7,7 +7,9 @@ export const AddEmployee = ({ onClose, nit, fetchEmployees }) => {
   const [allEmployees, setAllEmployees] = useState([]); // Estado para almacenar todos los empleados sin empresa
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/getEmployeesWithoutCompany")
+    fetch(
+      "https://serverformacion.up.railway.app/api/getEmployeesWithoutCompany"
+    )
       .then((res) => {
         return res.json();
       })
@@ -38,7 +40,7 @@ export const AddEmployee = ({ onClose, nit, fetchEmployees }) => {
       };
 
       // Realiza una solicitud POST al servidor para asignar el NIT al empleado
-      fetch("http://localhost:3000/api/assignNITToEmployee", {
+      fetch("https://serverformacion.up.railway.app/api/assignNITToEmployee", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

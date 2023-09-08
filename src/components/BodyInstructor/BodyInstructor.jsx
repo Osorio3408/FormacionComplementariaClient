@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { ListCoursesManager } from "../ListCoursesManager/ListCoursesManager";
 import { LogOut } from "lucide-react";
-import { ProfileEmployee } from "../ProfileEmployee/ProfileEmployee";
+import React, { useState } from "react";
+import { ListCoursesInstructor } from "../ListCoursesInstructor/ListCoursesInstructor";
 
-export const BodyEmployee = ({ handleLogout, nit }) => {
+export const BodyInstructor = ({ handleLogout }) => {
   const [selectedTab, setSelectedTab] = useState("Courses");
 
   return (
@@ -19,15 +18,6 @@ export const BodyEmployee = ({ handleLogout, nit }) => {
             onClick={() => setSelectedTab("Courses")}>
             Cursos
           </li>
-          <li
-            className={`cursor-pointer py-2 ${
-              selectedTab === "Profile"
-                ? "border-b border-blue-600 text-blue-600"
-                : "hover:border-b hover:border-neutral-400"
-            }`}
-            onClick={() => setSelectedTab("Profile")}>
-            Datos personales
-          </li>
         </ul>
         <div className="flex justify-center items-center ">
           <button
@@ -39,10 +29,7 @@ export const BodyEmployee = ({ handleLogout, nit }) => {
       </div>
 
       <div className="mx-4 py-10 h-full ">
-        {selectedTab == "Courses" && (
-          <ListCoursesManager Employee={true} nit={nit} />
-        )}
-        {selectedTab == "Profile" && <ProfileEmployee />}
+        {selectedTab == "Courses" && <ListCoursesInstructor />}
       </div>
     </div>
   );

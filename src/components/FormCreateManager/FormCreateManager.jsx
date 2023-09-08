@@ -69,13 +69,16 @@ export const FormCreateManager = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/newManager", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formDataE),
-      });
+      const response = await fetch(
+        "https://serverformacion.up.railway.app/api/newManager",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formDataE),
+        }
+      );
 
       if (response.ok) {
         toast.success("Cuenta de encargado/empresa fue creada exitosamente!");

@@ -13,12 +13,15 @@ export const ListCoursesManager = ({ Employee }) => {
     const token = getTokenFromCookies();
     const { nit, userId } = jwtDecode(token);
     setDocumentNumber(userId);
+    console.log(userId);
     setNit(nit);
   }, []);
 
   useEffect(() => {
     if (nit) {
-      fetch(`http://localhost:3000/api/getCoursesEnterprise/${nit}`)
+      fetch(
+        `https://serverformacion.up.railway.app/api/getCoursesEnterprise/${nit}`
+      )
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
@@ -38,7 +41,7 @@ export const ListCoursesManager = ({ Employee }) => {
         const updatedCourses = await Promise.all(
           courses.map(async (course) => {
             const response = await fetch(
-              `http://localhost:3000/api/checkUserInCourse/${course._id}/${userId}`,
+              `https://serverformacion.up.railway.app/api/checkUserInCourse/${course._id}/${userId}`,
               {
                 method: "GET",
               }
@@ -95,7 +98,7 @@ export const ListCoursesManager = ({ Employee }) => {
       console.log(userId);
 
       const response = await fetch(
-        `http://localhost:3000/api/enrollUserInCourse/${courseId}`,
+        `https://serverformacion.up.railway.app/api/enrollUserInCourse/${courseId}`,
         {
           method: "POST",
           headers: {
@@ -164,18 +167,17 @@ export const ListCoursesManager = ({ Employee }) => {
               </td>
               {Employee ? (
                 <td className="border border-slate-300 px-4 py-2 text-center">
-                  {course.inscribed.map((data) =>
-                    data === documentNumber ? (
-                      <p className="font-medium">Registrado</p>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          enrollUserInCourse(course._id);
-                        }}
-                        className="bg-blue-600 text-white px-8 py-2 rounded-md">
-                        Incribirse
-                      </button>
-                    )
+                  {course.inscribed.length === 0 ||
+                  !course.inscribed.includes(documentNumber) ? (
+                    <button
+                      onClick={() => {
+                        enrollUserInCourse(course._id);
+                      }}
+                      className="bg-blue-600 text-white px-8 py-2 rounded-md">
+                      Inscribirse
+                    </button>
+                  ) : (
+                    <p className="font-medium">Registrado</p>
                   )}
                 </td>
               ) : (

@@ -17,7 +17,7 @@ export const ModalCreateCourse = ({ onClose }) => {
 
   useEffect(() => {
     // Obtener la lista de instructores del backend
-    fetch("http://localhost:3000/api/getInstructors")
+    fetch("https://serverformacion.up.railway.app/api/getInstructors")
       .then((response) => response.json())
       .then((data) => {
         // Actualizar el estado con la lista de instructores
@@ -59,7 +59,7 @@ export const ModalCreateCourse = ({ onClose }) => {
 
   // Obtener las opciones de empresas desde la API
   useEffect(() => {
-    fetch("http://localhost:3000/api/enterprises") // Ajusta la URL de la API según tu configuración
+    fetch("https://serverformacion.up.railway.app/api/enterprises") // Ajusta la URL de la API según tu configuración
       .then((response) => response.json())
       .then((data) => {
         const nameEnterpriseArray = data.map((item) => item.nameEnterprise);
@@ -82,7 +82,9 @@ export const ModalCreateCourse = ({ onClose }) => {
 
   // Función para cargar los detalles de la empresa seleccionada
   const cargarDetallesEmpresa = (nameEnterprise) => {
-    fetch(`http://localhost:3000/api/enterprise/${nameEnterprise}`) // Ajusta la URL de la API según tu configuración
+    fetch(
+      `https://serverformacion.up.railway.app/api/enterprise/${nameEnterprise}`
+    ) // Ajusta la URL de la API según tu configuración
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -106,16 +108,19 @@ export const ModalCreateCourse = ({ onClose }) => {
     e.preventDefault();
     try {
       console.log(formData.instructor);
-      const response = await fetch("http://localhost:3000/api/newCourse", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData, // Envía todos los campos del formulario en el cuerpo de la solicitud
-          idState: 1,
-        }),
-      });
+      const response = await fetch(
+        "https://serverformacion.up.railway.app/api/newCourse",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData, // Envía todos los campos del formulario en el cuerpo de la solicitud
+            idState: 1,
+          }),
+        }
+      );
 
       if (response.status === 201) {
         // El curso se creó exitosamente

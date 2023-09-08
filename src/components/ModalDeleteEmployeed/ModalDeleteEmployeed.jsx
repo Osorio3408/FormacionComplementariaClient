@@ -9,15 +9,18 @@ export const ModalDeleteEmployeed = ({
 }) => {
   console.log(documentNumber);
   const handleDeleteEmployee = () => {
-    fetch(`http://localhost:3000/api/deleteEmployee/${documentNumber}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://serverformacion.up.railway.app/api/deleteEmployee/${documentNumber}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => {
         if (res.status === 200) {
           // Realiza alguna acción adicional después de la eliminación exitosa
           toast.success("Empleado eliminado exitosamente");
           fetchEmployees();
-          onClose()
+          onClose();
         } else {
           toast.error("Error al eliminar el empleado");
         }

@@ -19,7 +19,9 @@ export const ModalEditEmployee = ({
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/getEmployeed/${documentNumber}`)
+    fetch(
+      `https://serverformacion.up.railway.app/api/getEmployeed/${documentNumber}`
+    )
       .then((response) => response.json())
       .then((res) => {
         setEmployeeData(res[0]);
@@ -38,13 +40,16 @@ export const ModalEditEmployee = ({
 
   const handleSaveEmployee = () => {
     try {
-      fetch(`http://localhost:3000/api/editEmployee/${documentNumber}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(employeeData),
-      })
+      fetch(
+        `https://serverformacion.up.railway.app/api/editEmployee/${documentNumber}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(employeeData),
+        }
+      )
         .then((res) => {
           if (res.status === 200) {
             // Puedes realizar alguna acción adicional después de la edición exitosa

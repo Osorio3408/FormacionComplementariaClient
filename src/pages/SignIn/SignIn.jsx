@@ -43,13 +43,16 @@ export const SignIn = () => {
       setLoading(true);
 
       try {
-        const response = await fetch("http://localhost:3000/api/signIn", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "https://serverformacion.up.railway.app/api/signIn",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
 
         if (response.ok) {
           toast.success("Inicio de sesión exitosa!");
@@ -95,8 +98,8 @@ export const SignIn = () => {
               value={formData.email}
               name="email"
               type="email"
-              className="max-w-lg border border-black shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
-              placeholder="Correo electrónico"
+              className="max-w-lg border border-neutral-400 rounded-md shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
+              placeholder="Ingrese su correo electrónico..."
             />
             {errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
@@ -106,15 +109,15 @@ export const SignIn = () => {
               value={formData.password}
               name="password"
               type="password"
-              className="max-w-lg border border-black shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
-              placeholder="Contraseña"
+              className="max-w-lg border border-neutral-400 rounded-md shadow-md h-[60px] w-[24rem] xl:w-[576px] text-lg px-4 py-1"
+              placeholder="Ingrese su contraseña..."
             />
             {errors.password && (
               <p className="text-red-500">{errors.password}</p>
             )}
           </div>
           <div className="max-w-md w-full flex justify-center ">
-            <button className="bg-blue-600 hover:bg-blue-700 px-24 py-6 text-lg text-white">
+            <button className="bg-blue-600 hover:bg-blue-700 rounded-md px-24 py-6 text-lg text-white">
               {loading ? (
                 <Loader2 color="white" size={20} className="animate-spin" />
               ) : (

@@ -4,7 +4,9 @@ import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 
 export const FormCreateEmployee = ({ nit, admin }) => {
-  // const [rol, setRol] = useState("Instructor");
+  // const [rol, setRol] = useState("Instructor");7
+
+  console.log(nit);
 
   const [formData, setFormData] = useState({
     nameUser: "",
@@ -69,13 +71,16 @@ export const FormCreateEmployee = ({ nit, admin }) => {
       setLoading(true); // Activar el loader mientras se envía la solicitud
 
       try {
-        const response = await fetch("http://localhost:3000/api/newUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "https://serverformacion.up.railway.app/api/newUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
 
         const data = await response.json();
 

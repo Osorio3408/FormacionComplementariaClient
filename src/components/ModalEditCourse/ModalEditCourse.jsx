@@ -38,7 +38,7 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
   );
   useEffect(() => {
     // Obtener la lista de instructores del backend
-    fetch("http://localhost:3000/api/getInstructors")
+    fetch("https://serverformacion.up.railway.app/api/getInstructors")
       .then((response) => response.json())
       .then((data) => {
         // Actualizar el estado con la lista de instructores
@@ -89,7 +89,7 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
       };
 
       const response = await fetch(
-        `http://localhost:3000/api/updateCourse/${assignedCourse._id}`,
+        `https://serverformacion.up.railway.app/api/updateCourse/${assignedCourse._id}`,
         {
           method: "PUT",
           headers: {

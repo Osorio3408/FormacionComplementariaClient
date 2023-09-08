@@ -50,13 +50,16 @@ export const Upload = ({ nit }) => {
         setLoading(true); // Mostrar el loader
         setTableVisible(false); // Ocultar la tabla
 
-        const response = await fetch("http://localhost:3000/api/newEmployees", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newUsers),
-        });
+        const response = await fetch(
+          "https://serverformacion.up.railway.app/api/newEmployees",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUsers),
+          }
+        );
 
         setLoading(false); // Ocultar el loader
         setTableVisible(true); // Mostrar la tabla

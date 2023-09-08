@@ -5,7 +5,7 @@ import { LogOut } from "lucide-react";
 import { CreateAssingCourse } from "../CreateAssingCourse/CreateAssingCourse";
 import { FormCreateEmployee } from "../FormCreateEmployee/FormCreateEmployee";
 
-export const BodyAdmin = ({ handleLogout }) => {
+export const BodyAdmin = ({ handleLogout, nit }) => {
   const [selectedTab, setSelectedTab] = useState("empresarial");
 
   return (
@@ -51,7 +51,7 @@ export const BodyAdmin = ({ handleLogout }) => {
       <div className="mx-4 py-10 h-full ">
         {selectedTab === "empresarial" && <FormCreateManager />}
         {selectedTab === "CreateEmployee" && (
-          <FormCreateEmployee admin={true} nit={" "} />
+          <FormCreateEmployee admin={true} nit={nit} />
         )}
         {selectedTab === "CreateAssignCourse" && <CreateAssingCourse />}
         {/* {selectedTab === "empresarial" && <FormCreateManager />} */}
