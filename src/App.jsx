@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Home } from "./pages/Home/Home";
 import { UserContextProvider } from "./Context/UserContext";
+import { PasswordRecovery } from "./pages/PasswordRecovery/PasswordRecovery";
+import { ResetPassword } from "./pages/ResetPassword/ResetPassword";
 
 export const App = () => {
   return (
@@ -19,6 +21,8 @@ export const App = () => {
             <Route path="/Login" element={<SignIn />} />
             <Route path="/Register" element={<SignUp />} />
             <Route path="/Upload" element={<Upload />} />
+            <Route path="/RecoverPassword" element={<PasswordRecovery />} />
+            <Route path="/ResetPassword/:token" element={<ResetPassword />} />
           </Routes>
         </UserContextProvider>
       </Router>

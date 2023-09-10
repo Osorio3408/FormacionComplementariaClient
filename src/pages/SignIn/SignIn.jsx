@@ -133,9 +133,11 @@ export const SignIn = () => {
             </Link>
             <p className="font-medium">
               ¿Olvidó su contraseña?{" "}
-              <span className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
+              <Link
+                to="/RecoverPassword"
+                className="text-blue-600 underline font-normal hover:underline-offset-2 hover:cursor-pointer">
                 Recuperar
-              </span>
+              </Link>
             </p>
           </div>
         </form>
