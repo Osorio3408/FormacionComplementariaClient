@@ -9,7 +9,7 @@ export const ViewHistory = () => {
   useEffect(() => {
     // Realiza la solicitud FETCH para obtener el historial
     //https://serverformacion.up.railway.app
-    fetch("http://localhost:3000/api/getHistory")
+    fetch("https://serverformacion.up.railway.app/api/getHistory")
       .then((response) => response.json())
       .then((data) => {
         // Almacena los datos del historial en el estado
