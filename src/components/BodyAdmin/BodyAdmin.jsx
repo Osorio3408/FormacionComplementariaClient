@@ -4,6 +4,7 @@ import { FormCreateUser } from "../FormCreateUser/FormCreateUser";
 import { LogOut } from "lucide-react";
 import { CreateAssingCourse } from "../CreateAssingCourse/CreateAssingCourse";
 import { FormCreateEmployee } from "../FormCreateEmployee/FormCreateEmployee";
+import { ViewHistory } from "../ViewHistory/ViewHistory";
 
 export const BodyAdmin = ({ handleLogout, nit }) => {
   const [selectedTab, setSelectedTab] = useState("empresarial");
@@ -39,6 +40,15 @@ export const BodyAdmin = ({ handleLogout, nit }) => {
             onClick={() => setSelectedTab("CreateAssignCourse")}>
             Crear y Asignar curso
           </li>
+          <li
+            className={`cursor-pointer py-2 ${
+              selectedTab === "ViewHistory"
+                ? "border-b border-blue-600 text-blue-600"
+                : "hover:border-b hover:border-neutral-400"
+            }`}
+            onClick={() => setSelectedTab("ViewHistory")}>
+            Ver historial
+          </li>
         </ul>
         <div className="flex justify-center items-center ">
           <button
@@ -54,6 +64,7 @@ export const BodyAdmin = ({ handleLogout, nit }) => {
           <FormCreateEmployee admin={true} nit={nit} />
         )}
         {selectedTab === "CreateAssignCourse" && <CreateAssingCourse />}
+        {selectedTab === "ViewHistory" && <ViewHistory />}
         {/* {selectedTab === "empresarial" && <FormCreateManager />} */}
       </div>
     </div>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../Context/UserContext";
 import jwtDecode from "jwt-decode";
+import { HistoryModal } from "../../pages/HistoryModal/HistoryModal";
 
 export const ModalCreateCourse = ({ onClose }) => {
   // Nuevo estado para almacenar la lista de instructores
@@ -10,6 +11,8 @@ export const ModalCreateCourse = ({ onClose }) => {
 
   // Nuevo estado para almacenar la selección del instructor
   const [selectedInstructor, setSelectedInstructor] = useState("");
+
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
 
   // Estado para almacenar el documento del instructor seleccionado
   const [selectedInstructorDocument, setSelectedInstructorDocument] =
@@ -54,6 +57,10 @@ export const ModalCreateCourse = ({ onClose }) => {
 
   // Estado para almacenar las opciones de empresas
   const [empresasOptions, setEmpresasOptions] = useState([]);
+
+  const handleShowHistoryModal = () => {
+    setShowHistoryModal(true);
+  };
 
   const { getTokenFromCookies } = useUserContext();
 
@@ -104,8 +111,7 @@ export const ModalCreateCourse = ({ onClose }) => {
       });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       console.log(formData.instructor);
       const response = await fetch(
@@ -413,12 +419,24 @@ export const ModalCreateCourse = ({ onClose }) => {
             Cancelar
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={handleShowHistoryModal}
             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
             Guardar Cambios
           </button>
         </div>
       </div>
+      {showHistoryModal && (
+        <HistoryModal
+          isOpen={showHistoryModal}
+          onClose={() => {
+            setShowHistoryModal(false);
+          }}
+          onSaveHistory={() => {
+            // Luego, llama a la función para actualizar el curso
+            handleSubmit();
+          }}
+        />
+      )}
     </div>
   );
 };

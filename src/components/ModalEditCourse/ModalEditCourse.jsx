@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { HistoryModal } from "../../pages/HistoryModal/HistoryModal";
 
 export const ModalEditCourse = ({ assignedCourse, onClose }) => {
   //Se crea data para simplificar la asignacións de valores del curso.
@@ -32,6 +33,8 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
   // Nuevo estado para almacenar la lista de instructores
   const [instructors, setInstructors] = useState([]);
 
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+
   // Nuevo estado para almacenar la selección del instructor
   const [selectedInstructor, setSelectedInstructor] = useState(
     data.course.instructor // Establece el instructor actual como seleccionado por defecto
@@ -53,6 +56,10 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
   const formattedDate = new Date(formData.contactDate)
     .toISOString()
     .slice(0, 16);
+
+  const handleShowHistoryModal = () => {
+    setShowHistoryModal(true);
+  };
 
   const handleUpdateCourse = async () => {
     try {
@@ -338,14 +345,17 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
             </div>
             <div className="mb-6">
               <label className="block text-sm font-bold text-gray-700">
-                Formación solicitada
+                Formación Asignada
               </label>
               <input
                 type="text"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.nameCourse}
+                value={formData.nameCourseAssigned}
                 onChange={(e) =>
-                  setFormData({ ...formData, nameCourse: e.target.value })
+                  setFormData({
+                    ...formData,
+                    nameCourseAssigned: e.target.value,
+                  })
                 }
               />
             </div>
@@ -407,12 +417,24 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
             Cancelar
           </button>
           <button
-            onClick={handleUpdateCourse}
+            onClick={handleShowHistoryModal}
             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
             Guardar Cambios
           </button>
         </div>
       </div>
+      {showHistoryModal && (
+        <HistoryModal
+          isOpen={showHistoryModal}
+          onClose={() => {
+            setShowHistoryModal(false);
+          }}
+          onSaveHistory={() => {
+            // Luego, llama a la función para actualizar el curso
+            handleUpdateCourse();
+          }}
+        />
+      )}
     </div>
   );
 };
