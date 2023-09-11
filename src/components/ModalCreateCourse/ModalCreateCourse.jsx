@@ -428,6 +428,7 @@ export const ModalCreateCourse = ({ onClose }) => {
       {showHistoryModal && (
         <HistoryModal
           isOpen={showHistoryModal}
+          nit={formData.nit}
           onClose={() => {
             setShowHistoryModal(false);
           }}

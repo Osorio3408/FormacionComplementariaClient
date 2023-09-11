@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useUserContext } from "../../Context/UserContext";
 import jwtDecode from "jwt-decode";
 
-export const HistoryModal = ({ onClose, onSaveHistory }) => {
+export const HistoryModal = ({ onClose, onSaveHistory, nit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [documentNumber, setDocumentNumber] = useState();
@@ -31,11 +31,13 @@ export const HistoryModal = ({ onClose, onSaveHistory }) => {
       title,
       description,
       documentNumber,
+      nit,
     };
 
     try {
       const response = await fetch(
-        "https://serverformacion.up.railway.app/api/saveHistory",
+        //https://serverformacion.up.railway.app
+        "http://localhost:3000/api/saveHistory",
         {
           method: "POST",
           headers: {

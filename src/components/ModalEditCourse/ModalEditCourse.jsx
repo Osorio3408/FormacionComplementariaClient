@@ -425,6 +425,7 @@ export const ModalEditCourse = ({ assignedCourse, onClose }) => {
       </div>
       {showHistoryModal && (
         <HistoryModal
+          nit={formData.nit}
           isOpen={showHistoryModal}
           onClose={() => {
             setShowHistoryModal(false);
