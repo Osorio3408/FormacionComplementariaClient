@@ -37,7 +37,7 @@ export const HistoryModal = ({ onClose, onSaveHistory, nit }) => {
     try {
       const response = await fetch(
         //https://serverformacion.up.railway.app
-        "http://https://serverformacion.up.railway.app/api/saveHistory",
+        "https://serverformacion.up.railway.app/api/saveHistory",
         {
           method: "POST",
           headers: {

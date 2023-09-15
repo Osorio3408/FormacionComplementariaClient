@@ -57,7 +57,7 @@ export const ViewHistory = () => {
 
     // Agrega el título del PDF
     doc.setFontSize(16);
-    doc.text("Historial de Cambios", 14, 15);
+    doc.text("Historial de Cambios - SENA", 14, 15);
 
     // Guarda o descarga el PDF (puedes personalizar el nombre del archivo)
     doc.save("historial.pdf");

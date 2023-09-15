@@ -6,6 +6,7 @@ import { Upload } from "../../pages/Upload/Upload";
 import { FormCreateEmployee } from "../FormCreateEmployee/FormCreateEmployee";
 import { ListEmployees } from "../ListEmployees/ListEmployees";
 import { ListCoursesManager } from "../ListCoursesManager/ListCoursesManager";
+import UploadDocuments from "../UploadDocuments/UploadDocuments";
 
 export const BodyManager = ({ handleLogout, nit }) => {
   const [selectedTab, setSelectedTab] = useState("newEmployees");
@@ -50,6 +51,15 @@ export const BodyManager = ({ handleLogout, nit }) => {
             onClick={() => setSelectedTab("seeEmployees")}>
             Ver empleados
           </li>
+          {/* <li
+            className={`cursor-pointer py-2 ${
+              selectedTab === "uploadIDs"
+                ? "border-b border-blue-600 text-blue-600"
+                : "hover:border-b hover:border-neutral-400"
+            }`}
+            onClick={() => setSelectedTab("uploadIDs")}>
+            Subir Cédulas
+          </li> */}
         </ul>
         <div className="flex justify-center items-center ">
           <button
@@ -67,6 +77,7 @@ export const BodyManager = ({ handleLogout, nit }) => {
         )}
         {selectedTab == "seeCourses" && <ListCoursesManager Employee={false} />}
         {selectedTab == "seeEmployees" && <ListEmployees nit={nit} />}
+        {selectedTab == "uploadIDs" && <UploadDocuments />}
       </div>
     </div>
   );
